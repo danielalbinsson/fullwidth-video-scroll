@@ -10,57 +10,55 @@ gsap.registerPlugin(ScrollTrigger);
 export default function VideoScrollPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const video = videoRef.current;
     const container = containerRef.current;
 
     if (!video || !container) return;
+    
+    // Using gsap.context for easier cleanup in React
+    const ctx = gsap.context(() => {
+      const handleLoadedMetadata = () => {
+        // Set initial video state
+        video.currentTime = 0;
+        video.pause();
 
-    // Wait for video metadata to load
-    const handleLoadedMetadata = () => {
-      // Set video properties
-      video.currentTime = 0;
-      video.pause();
+        // The master timeline for the scroll-based animation
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: 'top top',
+            end: `+=${video.duration * 250}`,
+            scrub: true,
+            pin: true,
+          },
+        });
 
-      // Create ScrollTrigger for video playback
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: container,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.5, // Smooth scrubbing with slight delay for better performance
-          onUpdate: (self) => {
-            // Calculate video time based on scroll progress
-            const progress = self.progress;
-            const duration = video.duration || 0;
-            
-            if (duration > 0) {
-              video.currentTime = progress * duration;
-            }
-          }
-        }
-      });
-    };
+        // mapping the timeline to the video's duration
+        tl.to(video, {
+          currentTime: video.duration,
+          ease: 'none',
+        });
+      };
 
-    if (video.readyState >= 1) {
-      // Video metadata already loaded
-      handleLoadedMetadata();
-    } else {
-      // Wait for metadata to load
-      video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    }
+      if (video.readyState >= 1) {
+        // check if the video metadata is loaded
+        handleLoadedMetadata();
+      } else {
+        video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
+      }
+    }, mainRef); 
 
-    // Cleanup function
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    // Cleanup function - cleans up all GSAP animations and ScrollTriggers within the context
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Video container - scrollable */}
-      <div 
+    <div ref={mainRef} className="bg-black">
+      {/* Video container - This element will be pinned */}
+      <div
         ref={containerRef}
         className="h-screen bg-black flex items-center justify-center overflow-hidden"
       >
@@ -76,10 +74,10 @@ export default function VideoScrollPage() {
         </video>
       </div>
       
-      {/* Fin screen - scrollable page */}
+      {/* Next screen - Will only become visible after the pinning ends */}
       <div className="h-screen bg-white flex items-center justify-center">
         <h1 className="text-6xl font-bold text-black">Fin</h1>
       </div>
     </div>
   );
-} 
+}

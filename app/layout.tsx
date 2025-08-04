@@ -2,8 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Video Scroll Test',
-  description: 'GSAP ScrollTrigger video playback test',
+  title: 'Video Scroll Playback',
+  description: 'GSAP ScrollTrigger video playback with text',
 }
 
 export default function RootLayout({

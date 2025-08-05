@@ -35,7 +35,7 @@ export default function VideoScrollTextPage() {
           scrollTrigger: {
             trigger: container,
             start: 'top top',
-            end: '+=4000',
+            end: '+=600',
             scrub: true,
             pin: true,
           },
@@ -47,26 +47,26 @@ export default function VideoScrollTextPage() {
           ease: 'none',
         }, 0);
 
-        // Animate the text container
+        // Animate the text containers with stagger
         tl.to(textContainer1, {
-            y: () => -(textContainer1.offsetHeight + window.innerHeight),
-            ease: 'none',
-        }, 0);
+            y: () => -(textContainer1.offsetHeight + window.innerHeight - 280),
+            ease: 'expo.out',
+        }, 0.04);
 
         tl.to(textContainer2, {
-            y: () => -(textContainer2.offsetHeight + window.innerHeight),
-            ease: 'none',
-        }, 0);
+            y: () => -(textContainer2.offsetHeight + window.innerHeight - 280),
+            ease: 'expo.out',
+        }, 0.08);
 
         tl.to(textContainer3, {
-            y: () => -(textContainer3.offsetHeight + window.innerHeight),
-            ease: 'none',
-        }, 0);
+            y: () => -(textContainer3.offsetHeight + window.innerHeight - 280),
+            ease: 'expo.out',
+        }, 0.1);
 
         tl.to(textContainer4, {
-            y: () => -(textContainer4.offsetHeight + window.innerHeight),
-            ease: 'none',
-        }, 0);
+            y: () => -(textContainer4.offsetHeight + window.innerHeight - 100),
+            ease: 'expo.out',
+        }, 0.12);
       };
       
       if (video.readyState >= 1) {
@@ -112,7 +112,7 @@ export default function VideoScrollTextPage() {
                 <p className="pb-4 max-w-lg ">
                     And sings the tune without the words —
                 </p>
-                <p className="max-w-lg pb-12">
+                <p className="max-w-lg pb-4">
                     And never stops — at all —
                 </p>
 
@@ -126,12 +126,10 @@ export default function VideoScrollTextPage() {
                 <p className="pb-4 max-w-lg ">
                     And sore must be the storm —
                 </p>
-
-
                 <p className="pb-4 max-w-lg ">
                     That could abash the little Bird
                 </p>
-                <p className="max-w-lg pb-12">
+                <p className="max-w-lg pb-4">
                     That kept so many warm —
                 </p>
                 </div>
@@ -147,15 +145,13 @@ export default function VideoScrollTextPage() {
                 <p className="pb-4 max-w-lg ">
                     Yet — never — in Extremity,
                 </p>
-                <p className="max-w-lg pb-12">
+                <p className="pb-4 max-w-lg">
                     It asked a crumb — of Me.
                 </p>
                 </div>
 
-                <div ref={textContainer4Ref} className="text-xl flex flex-col py-8 px-12 lg:px-96 text-white">
-
+                <div ref={textContainer4Ref} className="text-xl flex flex-col py-0 px-12 lg:px-96 text-white">
                 <p className="text-md max-w-lg">
-
                 "Hope is the Thing with Feathers"
                 by Emily Dickinson
                 </p>
@@ -166,7 +162,7 @@ export default function VideoScrollTextPage() {
       
       {/* Fin screen */}
       <div className="h-screen bg-white flex items-center justify-center">
-        <h1 className="text-4xl font-bold text-black">Fin</h1>
+        <h1 className="text-6xl font-bold text-black">Fin</h1>
       </div>
     </div>
   );

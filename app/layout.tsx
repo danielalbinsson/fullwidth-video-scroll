@@ -1,5 +1,12 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import { Instrument_Serif } from 'next/font/google'
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-instrument-serif',
+})
 
 export const metadata: Metadata = {
   title: 'Video Scroll Playback',
@@ -13,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={instrumentSerif.className}>{children}</body>
     </html>
   )
 } 
